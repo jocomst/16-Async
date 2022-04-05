@@ -123,7 +123,7 @@ getCountryAndNeighbor('mexico');
 //   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
 //   request.send();
 
-const request = fetch(`https://restcountries.com/v3.1/name/usa`);
+// const request = fetch(`https://restcountries.com/v3.1/name/usa`);
 
 //promise are a container for a future value
 // promises are time sensitive and can hold different states
@@ -212,3 +212,34 @@ btn.addEventListener('click', function () {
 });
 
 // getCountryData('sdfgjdkf');
+/*
+function getCurrentPosition() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      whereAmI(pos.coords.latitude, pos.coords.longitude);
+    });
+  }
+}
+
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat},${lng}?json=1`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Uh ohhh :(');
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.state}`);
+      getCountryData(data.adminareas.admin8.is_in_country);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
+getCurrentPosition();
+
+*/
