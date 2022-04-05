@@ -89,5 +89,3 @@ const getCountryAndNeighbor = function (country) {
     });
   });
 };
-
-getCountryAndNeighbor('mexico');
