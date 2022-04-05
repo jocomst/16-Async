@@ -335,3 +335,26 @@ const whereAmI = function () {
 btn.addEventListener('click', whereAmI);
 
 */
+
+const doWithImage = function (img) {
+  // return new Promise((resolve, reject) => {
+  //   resolve(() => {
+  console.log(img);
+  const newImg = document.createElement('img');
+  newImg.src = img.image;
+  const images = document.querySelector('.images');
+  images.appendChild(newImg);
+};
+
+const getFoodPics = function () {
+  return fetch(`https://foodish-api.herokuapp.com/api/`);
+};
+
+getFoodPics()
+  .then(
+    img => {
+      return img.json();
+    },
+    err => console.error(err)
+  )
+  .then(doWithImage);
