@@ -242,4 +242,61 @@ const whereAmI = function (lat, lng) {
 
 getCurrentPosition();
 
+
+
+console.log('Test start');
+setTimeout(() => {
+  console.log('0 seconds timer');
+}, 0);
+
+Promise.resolve('Resolved promise 1').then(res => console.log(res));
+Promise.resolve('Resolved promise 2').then(res => {
+  for (let i = 0; i < 1000000000; i++) {}
+  console.log(res);
+});
+console.log('Test end');
+
 */
+
+const lottery = new Promise(function (resolve, reject) {
+  console.log('Lottery draw is happening');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You WIN! :)');
+    } else {
+      reject(new Error('I lost my money :('));
+    }
+  }, 2000);
+});
+
+lottery
+  .then(resolution => {
+    console.log(resolution);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
+//promisifying set timeout
+const wait = function (seconds) {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(2)
+  .then(() => {
+    console.log('I waited for 2 seconds');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('I waited for 3 seconds total');
+  });
+
+Promise.resolve('Resolved value').then(x => {
+  console.log(x);
+});
+
+Promise.reject('Resolved value').catch(x => {
+  console.error(x);
+});
