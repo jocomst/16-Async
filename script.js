@@ -207,10 +207,6 @@ const getCountryData = function (country) {
     });
 };
 
-btn.addEventListener('click', function () {
-  getCountryData('fiji');
-});
-
 // getCountryData('sdfgjdkf');
 /*
 function getCurrentPosition() {
@@ -256,7 +252,7 @@ Promise.resolve('Resolved promise 2').then(res => {
 });
 console.log('Test end');
 
-*/
+
 
 const lottery = new Promise(function (resolve, reject) {
   console.log('Lottery draw is happening');
@@ -300,3 +296,42 @@ Promise.resolve('Resolved value').then(x => {
 Promise.reject('Resolved value').catch(x => {
   console.error(x);
 });
+
+
+const getPosition = function () {
+  return new Promise((resolve, reject) => {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => {
+    //     resolve(position);
+    //   },
+    //   err => reject(new Error(err))
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?json=1`);
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Uh ohhh :(');
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.state}`);
+      getCountryData(data.adminareas.admin8.is_in_country);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
+btn.addEventListener('click', whereAmI);
+
+*/
