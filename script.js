@@ -123,7 +123,7 @@ getCountryAndNeighbor('mexico');
 //   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
 //   request.send();
 
-const request = fetch(`https://restcountries.com/v3.1/name/usa`);
+// const request = fetch(`https://restcountries.com/v3.1/name/usa`);
 
 //promise are a container for a future value
 // promises are time sensitive and can hold different states
@@ -207,8 +207,209 @@ const getCountryData = function (country) {
     });
 };
 
-btn.addEventListener('click', function () {
-  getCountryData('fiji');
+// getCountryData('sdfgjdkf');
+/*
+function getCurrentPosition() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      whereAmI(pos.coords.latitude, pos.coords.longitude);
+    });
+  }
+}
+
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat},${lng}?json=1`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Uh ohhh :(');
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.state}`);
+      getCountryData(data.adminareas.admin8.is_in_country);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
+getCurrentPosition();
+
+
+
+console.log('Test start');
+setTimeout(() => {
+  console.log('0 seconds timer');
+}, 0);
+
+Promise.resolve('Resolved promise 1').then(res => console.log(res));
+Promise.resolve('Resolved promise 2').then(res => {
+  for (let i = 0; i < 1000000000; i++) {}
+  console.log(res);
+});
+console.log('Test end');
+
+
+
+const lottery = new Promise(function (resolve, reject) {
+  console.log('Lottery draw is happening');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You WIN! :)');
+    } else {
+      reject(new Error('I lost my money :('));
+    }
+  }, 2000);
 });
 
-// getCountryData('sdfgjdkf');
+lottery
+  .then(resolution => {
+    console.log(resolution);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
+//promisifying set timeout
+const wait = function (seconds) {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(2)
+  .then(() => {
+    console.log('I waited for 2 seconds');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('I waited for 3 seconds total');
+  });
+
+Promise.resolve('Resolved value').then(x => {
+  console.log(x);
+});
+
+Promise.reject('Resolved value').catch(x => {
+  console.error(x);
+});
+
+
+const getPosition = function () {
+  return new Promise((resolve, reject) => {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => {
+    //     resolve(position);
+    //   },
+    //   err => reject(new Error(err))
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?json=1`);
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Uh ohhh :(');
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.state}`);
+      getCountryData(data.adminareas.admin8.is_in_country);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
+btn.addEventListener('click', whereAmI);
+
+
+
+const doWithImage = function (img) {
+  // return new Promise((resolve, reject) => {
+  //   resolve(() => {
+  console.log(img);
+  const newImg = document.createElement('img');
+  newImg.src = img.image;
+  const images = document.querySelector('.images');
+  images.appendChild(newImg);
+  // removeImage(newImg);
+};
+
+const removeImage = function (img) {
+  setTimeout(() => {
+    img.style.opacity = 0;
+  }, 2000);
+};
+
+const getFoodPics = function () {
+  return fetch(`https://foodish-api.herokuapp.com/api/`);
+};
+
+getFoodPics()
+  .then(
+    img => {
+      return img.json();
+    },
+    err => console.error(err)
+  )
+  .then(doWithImage);
+*/
+
+const wait = function (seconds) {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images');
+
+const createImage = function (imgPath) {
+  return new Promise((resolve, reject) => {
+    const img = document.createElement('img');
+    img.src = imgPath;
+
+    img.addEventListener('load', () => {
+      imgContainer.append(img);
+      resolve(img);
+    });
+
+    img.addEventListener('error', () => {
+      reject(new Error('Image not found'));
+    });
+  });
+};
+let currentImg;
+
+createImage(`img/img-1.jpg`)
+  .then(img => {
+    currentImg = img;
+    console.log(`Image 1 loaded`);
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage(`img/img-2.jpg`);
+  })
+  .then(img => {
+    currentImg = img;
+    console.log(`Image 1 loaded`);
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+  })
+  .catch(err => {
+    console.error(err);
+  });
