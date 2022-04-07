@@ -25,6 +25,7 @@ const renderCountry = function (data, className = '') {
   </div>
 </article>`;
   countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
 };
 
 ///////////////////////////////////////
@@ -365,7 +366,7 @@ getFoodPics()
     err => console.error(err)
   )
   .then(doWithImage);
-*/
+
 
 const wait = function (seconds) {
   return new Promise(resolve => {
@@ -413,3 +414,46 @@ createImage(`img/img-1.jpg`)
   .catch(err => {
     console.error(err);
   });
+
+  */
+
+const getPosition = function () {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function () {
+  try {
+    //geolocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    //reverse geocoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?json=1`);
+    if (!resGeo.ok) throw new Error('Problem getting location data');
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
+    //country data
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    );
+    if (!resGeo.ok) throw new Error('Problem getting country data');
+    const data = await res.json();
+    console.log(data);
+    renderCountry(data[0]);
+  } catch (e) {
+    console.log(`Something went wrong ${e}`);
+    renderError(e.message);
+  }
+};
+
+whereAmI();
+console.log('Hey there!');
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = y;
+// } catch (e) {
+//   alert(e.message);
+// }
